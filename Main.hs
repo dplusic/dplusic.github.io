@@ -18,7 +18,7 @@ import Miso hiding (defaultOptions)
 import Miso.String
 
 -- | Model
-data Model = Model
+newtype Model = Model
   { info :: Maybe APIInfo
   } deriving (Eq, Show)
 
@@ -31,13 +31,14 @@ data Action
 
 -- | Main entry point
 main :: IO ()
-main = do
-  startApp App {model = Model Nothing, initialAction = NoOp, ..}
+main = startApp App {model = Model Nothing, initialAction = NoOp, ..}
   where
     update = updateModel
     events = defaultEvents
     subs = []
     view = viewModel
+
+{-# ANN updateModel "HLint: ignore Redundant do" #-}
 
 -- | Update your model
 updateModel :: Action -> Model -> Effect Action Model
@@ -83,6 +84,8 @@ viewModel Model {..} = view
           [onClick FetchGitHub, class_ $ pack "button is-large is-outlined"] ++
           [disabled_ $ pack "disabled" | isJust info]
 
+{-# ANN APIInfo "HLint: ignore Use camelCase" #-}
+
 data APIInfo = APIInfo
   { current_user_url :: MisoString
   , current_user_authorizations_html_url :: MisoString
@@ -118,7 +121,8 @@ data APIInfo = APIInfo
   } deriving (Show, Eq, Generic)
 
 instance FromJSON APIInfo where
-  parseJSON = genericParseJSON defaultOptions {fieldLabelModifier = camelTo '_'}
+  parseJSON =
+    genericParseJSON defaultOptions {fieldLabelModifier = camelTo2 '_'}
 
 getGitHubAPIInfo :: IO APIInfo
 getGitHubAPIInfo = do
