@@ -26,12 +26,11 @@ newtype Model = Model
 data Action
   = FetchGitHub
   | SetGitHub APIInfo
-  | NoOp
   deriving (Show, Eq)
 
 -- | Main entry point
 main :: IO ()
-main = startApp App {model = Model Nothing, initialAction = NoOp, ..}
+main = startApp App {model = Model Nothing, initialAction = FetchGitHub, ..}
   where
     update = updateModel
     events = defaultEvents
@@ -44,7 +43,6 @@ main = startApp App {model = Model Nothing, initialAction = NoOp, ..}
 updateModel :: Action -> Model -> Effect Action Model
 updateModel FetchGitHub m = m <# do SetGitHub <$> getGitHubAPIInfo
 updateModel (SetGitHub apiInfo) m = noEff m {info = Just apiInfo}
-updateModel NoOp m = noEff m
 
 -- | View function, with routing
 viewModel :: Model -> View Action
@@ -54,9 +52,8 @@ viewModel Model {..} = view
       div_
         [style_ $ M.fromList [(pack "text-align", pack "center"), (pack "margin", pack "200px")]]
         [ h1_ [class_ $ pack "title"] [text $ pack "Miso XHR Example"]
-        , button_ attrs [text $ pack "Fetch JSON from https://api.github.com via XHR"]
         , case info of
-            Nothing -> div_ [] [text $ pack "No data"]
+            Nothing -> div_ [] [text $ pack "Fetching..."]
             Just APIInfo {..} ->
               table_
                 [class_ $ pack "table is-striped"]
@@ -74,8 +71,6 @@ viewModel Model {..} = view
                     ]
                 ]
         ]
-      where
-        attrs = [onClick FetchGitHub, class_ $ pack "button is-large is-outlined"] ++ [disabled_ $ pack "disabled" | isJust info]
 
 {-# ANN APIInfo "HLint: ignore Use camelCase" #-}
 
