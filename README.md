@@ -3,7 +3,7 @@
 ## Build
 
 ### Stack
-1. Install stack. http://haskellstack.org
+1. Install [stack](http://haskellstack.org).
 1. `stack install alex`
 1. `stack setup`
     * [Setting up GHCJS on Windows](https://docs.haskellstack.org/en/stable/ghcjs/#setting-up-ghcjs-on-windows)
