@@ -52,14 +52,9 @@ viewModel Model {..} = view
   where
     view =
       div_
-        [ style_ $
-          M.fromList
-            [(pack "text-align", pack "center"), (pack "margin", pack "200px")]
-        ]
+        [style_ $ M.fromList [(pack "text-align", pack "center"), (pack "margin", pack "200px")]]
         [ h1_ [class_ $ pack "title"] [text $ pack "Miso XHR Example"]
-        , button_
-            attrs
-            [text $ pack "Fetch JSON from https://api.github.com via XHR"]
+        , button_ attrs [text $ pack "Fetch JSON from https://api.github.com via XHR"]
         , case info of
             Nothing -> div_ [] [text $ pack "No data"]
             Just APIInfo {..} ->
@@ -80,9 +75,7 @@ viewModel Model {..} = view
                 ]
         ]
       where
-        attrs =
-          [onClick FetchGitHub, class_ $ pack "button is-large is-outlined"] ++
-          [disabled_ $ pack "disabled" | isJust info]
+        attrs = [onClick FetchGitHub, class_ $ pack "button is-large is-outlined"] ++ [disabled_ $ pack "disabled" | isJust info]
 
 {-# ANN APIInfo "HLint: ignore Use camelCase" #-}
 
@@ -121,8 +114,7 @@ data APIInfo = APIInfo
   } deriving (Show, Eq, Generic)
 
 instance FromJSON APIInfo where
-  parseJSON =
-    genericParseJSON defaultOptions {fieldLabelModifier = camelTo2 '_'}
+  parseJSON = genericParseJSON defaultOptions {fieldLabelModifier = camelTo2 '_'}
 
 getGitHubAPIInfo :: IO APIInfo
 getGitHubAPIInfo = do
@@ -131,12 +123,4 @@ getGitHubAPIInfo = do
     Left s -> error s
     Right j -> pure j
   where
-    req =
-      Request
-      { reqMethod = GET
-      , reqURI = pack "https://api.github.com"
-      , reqLogin = Nothing
-      , reqHeaders = []
-      , reqWithCredentials = False
-      , reqData = NoData
-      }
+    req = Request {reqMethod = GET, reqURI = pack "https://api.github.com", reqLogin = Nothing, reqHeaders = [], reqWithCredentials = False, reqData = NoData}
