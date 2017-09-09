@@ -12,7 +12,9 @@ executable app
     base,
     containers,
     ghcjs-base,
+    text,
     aeson,
+    raw-strings-qq,
     miso
   default-language:
     Haskell2010
