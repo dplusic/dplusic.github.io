@@ -13,3 +13,8 @@
 
 ### Front-end Framework
   * [miso](https://github.com/haskell-miso/miso)
+  * [ghcjs](https://github.com/ghcjs/ghcjs)
+    * [ghcjs-base](https://github.com/ghcjs/ghcjs-base)
+ 
+### OpenAPI
+  * [github-graphql-v4](https://developer.github.com/v4/)
