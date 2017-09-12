@@ -1,0 +1,29 @@
+branches:
+  only:
+  - develop
+
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+before_install:
+- docker pull dplusic/stack-ghcjs:lts-6.20
+
+script:
+- >
+  docker run -v $(pwd):/app dplusic/stack-ghcjs:lts-6.20 /bin/sh -c "
+  cd /app &&
+  stack build --allow-different-user &&
+  cp \$(stack path --local-install-root)/bin/app.jsexe/all.js .
+  "
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  target_branch: master
+  on:
+    branch: develop
