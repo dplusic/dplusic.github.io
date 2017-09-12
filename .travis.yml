@@ -16,7 +16,7 @@ script:
 - >
   docker run -v $(pwd):/app dplusic/stack-ghcjs:lts-6.20 /bin/sh -c "
   cd /app &&
-  stack build --allow-different-user &&
+  stack build &&
   cp \$(stack path --local-install-root)/bin/app.jsexe/all.js .
   "
 
